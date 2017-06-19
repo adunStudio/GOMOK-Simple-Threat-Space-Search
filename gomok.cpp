@@ -169,7 +169,7 @@ namespace AdunToridas {
                 }
             }
 
-            // 대각선 ↙ 아래쪽
+            // 대각선 ↙ 위쪽
             for (int q = 1; q <= SIZE; ++q)
             {
                 for (i = 1, j = q; i <= q; ++i, --j)
@@ -199,8 +199,8 @@ namespace AdunToridas {
 
 
             // 문제의 코드
-
-            //대각선 ↙ 위쪽
+            /*
+            //대각선 ↙ 아래쪽
             for (int q = 2; q <= SIZE; ++q)
             {
                 for (i = q + 1, j = SIZE; i < SIZE; ++i, --j)
@@ -212,12 +212,60 @@ namespace AdunToridas {
 
                 while ((str = strstr(temp, findThreat)) != NULL)
                 {
+
+
                     event.size = size;
 
                     for (int p = 0; p < size; ++p)
                     {
                         event.thread[p].row = q + (str - threat) + p + 2;
                         event.thread[p].col = q - event.thread[p].row;
+                        event.thread[p].stone = str[p];
+                    }
+
+                    lists.push_back(event);
+
+                    temp = str + 1;
+                }
+            }
+            */
+
+            //대각선 ↙ * -1 아래쪽
+            int n = 0;
+            int row, col;
+
+            for (int i = 0; i <= SIZE; ++i)
+            {
+
+                row = SIZE - 1;
+                col = i;
+                n = 0;
+
+                while (row >= 1 && col <= SIZE)
+                {
+                    threat[n] = (char)THREAT_BOARD[row][col];
+                    ++n;
+                    --row;
+                    ++col;
+                }
+
+                row += 1;
+                col -= 1;
+
+                threat[n+1] = '\0';
+                temp = threat;
+
+                while ((str = strstr(temp, findThreat)) != NULL)
+                {
+                    cout << row <<":"<< col << endl;
+                    cout << threat - str << endl;
+
+                    event.size = size;
+
+                    for (int p = 0; p < size; ++p)
+                    {
+                        event.thread[p].row = col - (str - threat) - p - 1;
+                        event.thread[p].col = row + (str - threat) + p + 1;
                         event.thread[p].stone = str[p];
                     }
 
@@ -595,7 +643,7 @@ namespace AdunToridas {
             BOARD[15][19] = ENEMY;
             BOARD[16][18] = ENEMY;
             BOARD[17][17] = ENEMY;
-
+            BOARD[18][16] = ENEMY;
 
             for (int row = 1; row < SIZE; ++row)
             {
@@ -611,11 +659,16 @@ namespace AdunToridas {
             attack(&a, &b);
 
             cout << endl;
-
-            for (int row = 1; row < SIZE; ++row)
+            cout << "  1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9" << endl;
+            for (int row = 1; row <= SIZE; ++row)
             {
-                for (int col = 1; col < SIZE; ++col)
+                for (int col = 1; col <= SIZE; ++col)
                 {
+                    if(col == 1 && row != 20)
+                    {
+                        int r = row >= 10 ? row - 10 : row;
+                        cout << r << " ";
+                    }
                     cout << BOARD[row][col] << " ";
                 }
                 cout << endl;
